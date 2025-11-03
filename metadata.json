@@ -1,0 +1,5 @@
+{
+  "name": "AI Cleaning Scheduler",
+  "description": "Upload cleaning service orders or conversation screenshots, and this AI-powered tool will automatically extract the details, fill out a form, and generate a Google Calendar event link for easy scheduling.",
+  "requestFramePermissions": []
+}
