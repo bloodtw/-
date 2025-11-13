@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import { CleaningScheduleData } from "../types";
 
@@ -21,7 +20,7 @@ const responseSchema = {
     "startTime": { "type": Type.STRING, "description": "The cleaning start time, formatted as HH:MM (24-hour)." },
     "endTime": { "type": Type.STRING, "description": "The cleaning end time, formatted as HH:MM (24-hour)." },
     "address": { "type": Type.STRING, "description": "The complete cleaning address." },
-    "notes": { "type": Type.STRING, "description": "Any special requests or notes from the customer." }
+    "notes": { "type": Type.STRING, "description": "Extract ALL special requests and notes from the customer, especially any text explicitly labeled or intended as '給管家的備註' (notes for the housekeeper). It is CRITICAL to extract the complete, verbatim text without any summarization or omission." }
   },
 };
 
@@ -30,7 +29,7 @@ export const extractScheduleFromImages = async (imageParts: { inlineData: { data
     throw new Error("Gemini API key is not configured.");
   }
 
-  const systemPrompt = "You are an assistant specialized in extracting customer cleaning appointment information from images. Your task is to consolidate information from all provided images to extract 'area', 'customer name', 'customer phone', 'cleaning date', 'start time', 'end time', 'cleaning address', and 'customer notes/requests', and output it in the specified JSON format. The cleaning date must be converted to YYYY-MM-DD format, and times to HH:MM (24-hour) format. If any piece of information cannot be found, use an empty string for its value.";
+  const systemPrompt = "You are an assistant specialized in extracting customer cleaning appointment information from images. Your task is to consolidate information from all provided images to extract 'area', 'customer name', 'customer phone', 'cleaning date', 'start time', 'end time', 'cleaning address', and 'customer notes/requests', and output it in the specified JSON format. For the 'notes' field, pay special attention to extracting ALL text specifically designated as '給管家的備註' (notes for the housekeeper). It is crucial to capture the full, complete, and verbatim text of these notes without any summarization or omission. The cleaning date must be converted to YYYY-MM-DD format, and times to HH:MM (24-hour) format. If any piece of information cannot be found, use an empty string for its value.";
   const userQuery = "Please consolidate and extract all customer cleaning appointment information from these images.";
 
   const parts = [
